@@ -241,6 +241,7 @@ static int fn_addon(smpl_t *smpl, int argc, smpl_value_t *argv,
 
  addon_error:
     smpl_json_unref(data);
+    addon_free(addon);
     smpl_fail(-1, smpl, -verdict, "failed to create addon");
 
  nomem:
