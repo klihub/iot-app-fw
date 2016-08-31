@@ -87,6 +87,7 @@ int addon_create(smpl_t *smpl, const char *name, const char *template,
     return -1;
 
  notifier_error:
+    addon_free(a);
     smpl_fail(-1, smpl, -verdict, "addon notifier failed");
 }
 
