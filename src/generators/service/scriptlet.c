@@ -796,7 +796,14 @@ static int restart_child(child_t *c)
         goto fork_failed;
 
     if (c->pid == 0) {
-        dup2(0, open("/dev/null", O_RDONLY));
+        int fd;
+
+        if ((fd = open("/dev/null", O_RDONLY)) < 0)
+            goto open_failed;
+
+        dup2(0, fd);
+        close(fd);
+
         if (execv(c->argv[0], c->argv) < 0)
             goto exec_failed;
     }
@@ -805,6 +812,10 @@ static int restart_child(child_t *c)
 
  fork_failed:
     log_error("Failed to fork child for starting '%s'...", c->argv[0]);
+    return -1;
+
+ open_failed:
+    log_error("Failed to open /dev/null (%d: %s).", errno, strerror(errno));
     return -1;
 
  exec_failed:
