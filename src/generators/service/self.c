@@ -165,7 +165,7 @@ static int process_cb(smpl_addon_t *addon, const char *output,
             }
         }
 
-        if ((status < smpl_write_addon(addon, O_CREAT)) < 0)
+        if ((status = smpl_write_addon(addon, O_CREAT)) < 0)
             goto addon_failed;
     }
 
